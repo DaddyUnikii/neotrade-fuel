@@ -25,7 +25,7 @@ GitHub Actions (repo ini, di-fork)
 
 - Tiap run cron, Worker kerja ±175 detik: narik kartu dengan jeda acak 10–60 detik, lalu berhenti. Cron berikutnya lanjut lagi. Jadi kartunya jalan terus, bukan cuma tiap 3 menit.
 - State (jumlah kartu, kredit, NPT, riwayat 30 kartu terakhir) disimpan di Durable Object, jadi halaman status langsung update tiap kartu.
-- Kalau kredit habis → Worker pause 30 menit lalu coba lagi. Cookie kedaluwarsa → status "Cookie kedaluwarsa", ganti secret `NT_COOKIE`.
+- Kalau kredit habis → Worker pause 5 menit lalu coba lagi. Bot fuel (kalau `STATUS_URL` diisi) langsung bangunin Worker setelah klaim pertama sukses. Cookie kedaluwarsa → status "Cookie kedaluwarsa", ganti secret `NT_COOKIE`.
 
 ---
 
@@ -104,7 +104,7 @@ Cloudflare Free cuma kasih **5 cron trigger** per akun Cloudflare, jadi pakai di
 | Aman / 🟢 ON | jalan normal | – |
 | Cookie belum diisi | secret `NT_COOKIE` kosong | isi secretnya |
 | Cookie kedaluwarsa | logout / sesi habis | ambil cookie baru, ganti secret |
-| Kredit habis | kredit < 80 | klaim fuel pack; Worker coba lagi tiap 30 menit |
+| Kredit habis | kredit < 80 | klaim fuel pack; Worker coba lagi tiap 5 menit (atau langsung, kalau STATUS_URL diisi) |
 
 ## Risiko (baca dulu)
 

@@ -24,7 +24,7 @@ function wrap(env) {
 
 const BASE = "https://app.neotrade.pro";
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
-const BACKOFF_MIN = { unauthorized: 30, insufficient_credits: 30, no_cookie: 30 };
+const BACKOFF_MIN = { unauthorized: 30, insufficient_credits: 5, no_cookie: 30 };
 
 async function sha(s) {
   const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s || ""));
@@ -110,7 +110,7 @@ export default {
     const msg = {
       no_cookie: "Cookie belum diisi (secret NT_COOKIE).",
       unauthorized: "Cookie kedaluwarsa/logout. Ganti secret NT_COOKIE.",
-      insufficient_credits: "Kredit habis. Klaim fuel pack di web, worker coba lagi tiap 30 menit.",
+      insufficient_credits: "Kredit habis. Klaim fuel pack di web, worker coba lagi tiap 5 menit.",
     }[st.lastError] || st.lastError || "Aman";
     const rows = (st.history || []).map(x => `<tr><td>${fmt(x.t)}</td><td>${x.credits ?? "-"}</td><td>${x.npt ?? "-"}</td></tr>`).join("");
     const html = `<!doctype html><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=refresh content=60>

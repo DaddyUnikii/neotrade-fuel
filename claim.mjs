@@ -46,6 +46,10 @@ for (let i = 0; i < n; i++) {
     out(`Klaim #${i + 1}: ${rc.status}, gas ${formatEther(rc.gasUsed * rc.effectiveGasPrice)} BNB, https://bscscan.com/tx/${hash}`);
     if (rc.status !== "success") break;
     ok++; errs = 0;
+    if (ok === 1 && process.env.STATUS_URL) {   // bangunin Worker kartu (hapus jeda "Kredit habis")
+      try { await fetch(process.env.STATUS_URL.trim().replace("/s/", "/on/"), { method: "POST", redirect: "manual" }); out("Worker kartu dibangunkan."); }
+      catch (e) { log("Gagal bangunin Worker:", e.message); }
+    }
   } catch (e) {
     if (++errs >= 5) { out(`Error 5x berturut, stop: ${e.shortMessage || e.message}`); break; }
     log("error, coba lagi:", e.shortMessage || e.message); i--;

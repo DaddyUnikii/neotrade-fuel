@@ -24,7 +24,7 @@ You are helping a user run NeoTrade (app.neotrade.pro) automation from this repo
 - `POST /on/<token>/<n>`, `POST /off/<token>/<n>`, `POST /allon/<token>`, `POST /alloff/<token>`.
 
 ### Errors in `lastError`
-`no_cookie` (secret missing, retry 30 min) · `unauthorized` (cookie expired/logged out, retry 30 min) · `insufficient_credits` (retry 30 min) · `too_soon` / `feed_busy` are handled silently · others retry after 5 min.
+`no_cookie` (secret missing, retry 30 min) · `unauthorized` (cookie expired/logged out, retry 30 min) · `insufficient_credits` (retry 5 min; the fuel bot POSTs `/on/<token>` after its first successful claim to clear the pause when `STATUS_URL` is set) · `too_soon` / `feed_busy` are handled silently · others retry after 5 min.
 
 ## Hard rules for agents
 
