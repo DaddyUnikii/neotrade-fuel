@@ -24,7 +24,7 @@ const wal = createWalletClient({ chain: bsc, transport, account });
 if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, "### NeoTrade fuel pack\n\n");
 out(`Wallet ${account.address.slice(0, 6)}…${account.address.slice(-4)}`);
 if (process.env.STATUS_URL) {
-  try { const st = await (await fetch(process.env.STATUS_URL)).json(); out(`Kredit sebelum klaim: ${st.credits ?? "?"} (status worker: ${st.lastError || "aman"})`); }
+  try { const st = await (await fetch(process.env.STATUS_URL.trim().replace("/s/", "/j/"))).json(); out(`Kredit sebelum klaim: ${st.credits ?? "?"} (status worker: ${st.lastError || "aman"})`); }
   catch (e) { log("Gagal baca status Worker:", e.message); }
 }
 
