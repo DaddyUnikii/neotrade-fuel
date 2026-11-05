@@ -34,7 +34,11 @@ log(`Wallet ${account.address.slice(0, 6)}…${account.address.slice(-4)}, tunda
 
 let st = null;
 try { st = await status(); } catch (e) { log("Gagal baca status Worker:", e.message); }
-const low = st && (st.lastError === "insufficient_credits" || (st.credits != null && st.credits < THRESHOLD));
+const stale = !st?.lastCardAt || Date.now() - st.lastCardAt > 2 * 3600e3;
+// Worker mati (cookie dihapus/kedaluwarsa) atau lama tidak ambil kartu -> jangan klaim
+const workerOff = !st || st.lastError === "no_cookie" || st.lastError === "unauthorized" || (stale && st.lastError !== "insufficient_credits");
+const low = st && !workerOff && (st.lastError === "insufficient_credits" || (st.credits != null && st.credits < THRESHOLD));
+if (workerOff) log("Worker tidak aktif, tidak klaim.");
 log("Status:", JSON.stringify(st));
 if (st?.lastError === "unauthorized" || st?.lastError === "no_cookie") log("PERINGATAN: cookie Worker kedaluwarsa, kartu berhenti. Ganti NT_COOKIE di Cloudflare.");
 
