@@ -1,0 +1,24 @@
+# Satu Worker = satu akun NeoTrade. Untuk akun ke-2 dst: copy file ini, ganti name & ACCOUNT.
+name = "nt-card-1"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+
+[vars]
+ACCOUNT = "1"
+
+[[durable_objects.bindings]]
+name = "DO"
+class_name = "StateDO"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["StateDO"]
+
+# Mode 1 akun: Worker jalan sendiri tiap 3 menit.
+# Mode multi-akun (pakai dispatcher/): HAPUS blok [triggers] ini, biar jadwalnya dari nt-cron.
+[triggers]
+crons = ["*/3 * * * *"]
+
+# Secret (isi lewat `wrangler secret put` atau dashboard, JANGAN ditulis di file ini):
+#   NT_COOKIE     -> isi header Cookie app.neotrade.pro (minimal ntw_session=...)
+#   STATUS_TOKEN  -> string acak 16+ karakter, jadi bagian rahasia URL status

@@ -1,0 +1,19 @@
+# Dispatcher multi-akun: satu cron yang memanggil semua Worker akun + satu halaman status gabungan.
+# Perlu karena Cloudflare Free cuma kasih 5 cron trigger per akun Cloudflare.
+name = "nt-cron"
+main = "cron.js"
+compatibility_date = "2024-11-01"
+
+[triggers]
+crons = ["*/3 * * * *"]
+
+# Satu baris per akun. Nama binding harus S1, S2, ... dan service = nama Worker akunnya.
+services = [
+  { binding = "S1", service = "nt-card-1" },
+  { binding = "S2", service = "nt-card-2" },
+  { binding = "S3", service = "nt-card-3" },
+]
+
+# Secret (wrangler secret put / dashboard):
+#   MASTER_TOKEN -> string acak, rahasia URL status gabungan (/s/<MASTER_TOKEN>)
+#   ACCOUNTS     -> JSON: [{"b":"S1","t":"<STATUS_TOKEN akun 1>"},{"b":"S2","t":"<STATUS_TOKEN akun 2>"}]
