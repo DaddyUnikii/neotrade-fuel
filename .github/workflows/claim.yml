@@ -2,10 +2,16 @@ name: NeoTrade fuel pack
 on:
   workflow_dispatch:
     inputs:
+      akun:
+        description: "Akun NeoTrade (1-6)"
+        type: choice
+        options: ["1", "2", "3", "4", "5", "6"]
+        default: "1"
       packs:
         description: "Jumlah pack (0 = klaim terus sampai di-cancel). 1 pack = +1.500 kredit"
         default: "0"
-concurrency: { group: fuel, cancel-in-progress: false }
+run-name: "Fuel pack akun ${{ inputs.akun }} (packs ${{ inputs.packs }})"
+concurrency: { group: "fuel-${{ inputs.akun }}", cancel-in-progress: false }
 jobs:
   claim:
     runs-on: ubuntu-latest
@@ -17,6 +23,7 @@ jobs:
       - run: npm install --no-audit --no-fund --silent
       - run: node claim.mjs
         env:
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          STATUS_URL: ${{ secrets.STATUS_URL }}
+          # Akun 1 pakai PRIVATE_KEY / STATUS_URL; akun lain PRIVATE_KEY_<n> / STATUS_URL_<n>
+          PRIVATE_KEY: ${{ inputs.akun == '1' && secrets.PRIVATE_KEY || secrets[format('PRIVATE_KEY_{0}', inputs.akun)] }}
+          STATUS_URL: ${{ inputs.akun == '1' && secrets.STATUS_URL || secrets[format('STATUS_URL_{0}', inputs.akun)] }}
           PACKS: ${{ inputs.packs }}

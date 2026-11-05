@@ -1,9 +1,9 @@
 # neotrade-fuel
 
-Klaim fuel pack NeoTrade secara manual: hanya jalan saat kamu klik Run workflow (tanpa jadwal). Isi jumlah pack, jeda antar klaim diacak.
+Klaim fuel pack NeoTrade secara manual: hanya jalan saat kamu klik Run workflow. Pilih akun 1-6, isi packs (0 = klaim terus dengan jeda acak 30-60 dtk sampai di-cancel, saldo BNB < 0,002, atau 350 menit).
 
-Secrets (Settings → Secrets and variables → Actions):
-- `PRIVATE_KEY`: private key wallet yang tertaut ke akun NeoTrade.
-- `STATUS_URL`: URL JSON status Worker.
+Secrets per akun (Settings → Secrets and variables → Actions):
+- Akun 1: `PRIVATE_KEY`, `STATUS_URL`
+- Akun 2-6: `PRIVATE_KEY_2` … `PRIVATE_KEY_6`, `STATUS_URL_2` … `STATUS_URL_6`
 
-Run manual: Actions → NeoTrade fuel pack → Run workflow (centang force untuk klaim langsung).
+PRIVATE_KEY = key wallet yang tertaut ke akun NeoTrade itu.
