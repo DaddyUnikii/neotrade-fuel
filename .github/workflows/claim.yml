@@ -1,15 +1,9 @@
 name: NeoTrade fuel pack
 on:
-  schedule:
-    - cron: "17 * * * *"   # tiap jam di menit 17, lalu tunda acak 0-5 menit di script
   workflow_dispatch:
     inputs:
-      force:
-        description: "Klaim sekarang tanpa cek kredit"
-        type: boolean
-        default: false
       packs:
-        description: "Jumlah pack kalau force"
+        description: "Jumlah fuel pack yang diklaim (1 pack = +1.500 kredit)"
         default: "1"
 concurrency: { group: fuel, cancel-in-progress: false }
 jobs:
@@ -25,5 +19,5 @@ jobs:
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           STATUS_URL: ${{ secrets.STATUS_URL }}
-          FORCE: ${{ inputs.force }}
+          FORCE: "true"
           PACKS: ${{ inputs.packs }}

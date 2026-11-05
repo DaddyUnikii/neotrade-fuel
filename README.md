@@ -1,6 +1,6 @@
 # neotrade-fuel
 
-Auto-claim NEO AI Fuel Pack (NeoTrade) saat kredit menipis. Cek tiap jam + tunda acak, klaim 2-3 pack dengan jeda acak.
+Klaim fuel pack NeoTrade secara manual: hanya jalan saat kamu klik Run workflow (tanpa jadwal). Isi jumlah pack, jeda antar klaim diacak.
 
 Secrets (Settings → Secrets and variables → Actions):
 - `PRIVATE_KEY`: private key wallet yang tertaut ke akun NeoTrade.

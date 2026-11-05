@@ -1,4 +1,4 @@
-// Auto-claim NEO AI Fuel Pack (+1.500 kredit) saat kredit NeoTrade menipis.
+// Klaim NEO AI Fuel Pack (+1.500 kredit) secara manual: jalan hanya saat kamu Run workflow.
 // Klaim = mintSoulbound(1) di kontrak kartu NeoTrade (BSC), dari wallet yang tertaut. Hanya bayar gas.
 import { createPublicClient, createWalletClient, http, fallback, encodeFunctionData, formatEther, parseAbi } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
@@ -33,7 +33,7 @@ const wait = FORCE ? 0 : rnd(0, 300);               // jam acak: tunda 0-5 menit
 log(`Wallet ${account.address.slice(0, 6)}…${account.address.slice(-4)}, tunda ${wait} dtk`); await sleep(wait);
 
 let st = null;
-try { st = await status(); } catch (e) { log("Gagal baca status Worker:", e.message); }
+try { if (process.env.STATUS_URL) st = await status(); } catch (e) { log("Gagal baca status Worker:", e.message); }
 const stale = !st?.lastCardAt || Date.now() - st.lastCardAt > 2 * 3600e3;
 // Worker mati (cookie dihapus/kedaluwarsa) atau lama tidak ambil kartu -> jangan klaim
 const workerOff = !st || st.lastError === "no_cookie" || st.lastError === "unauthorized" || (stale && st.lastError !== "insufficient_credits");
