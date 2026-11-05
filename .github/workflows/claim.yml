@@ -3,13 +3,13 @@ on:
   workflow_dispatch:
     inputs:
       packs:
-        description: "Jumlah fuel pack yang diklaim (1 pack = +1.500 kredit)"
-        default: "1"
+        description: "Jumlah pack (0 = klaim terus sampai di-cancel). 1 pack = +1.500 kredit"
+        default: "0"
 concurrency: { group: fuel, cancel-in-progress: false }
 jobs:
   claim:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 350
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -19,5 +19,4 @@ jobs:
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           STATUS_URL: ${{ secrets.STATUS_URL }}
-          FORCE: "true"
           PACKS: ${{ inputs.packs }}
