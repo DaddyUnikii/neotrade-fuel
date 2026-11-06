@@ -16,6 +16,7 @@ You are helping a user run NeoTrade (app.neotrade.pro) automation from this repo
 - `GET /s/<token>`: HTML status page with ON/OFF button and last 30 cards.
 - `GET /j/<token>`: JSON `{off, credits, npt, lastCardAt, lastError, pauseUntil, cards}`.
 - `POST /on/<token>`, `POST /off/<token>`: toggle.
+- `POST /wake/<token>`: clear an `insufficient_credits` pause without changing ON/OFF (used by the fuel bot).
 - `POST /tick/<token>`: run one work window (used by the dispatcher).
 - `scheduled`: same as tick (single-account mode with its own cron).
 
@@ -24,7 +25,7 @@ You are helping a user run NeoTrade (app.neotrade.pro) automation from this repo
 - `POST /on/<token>/<n>`, `POST /off/<token>/<n>`, `POST /allon/<token>`, `POST /alloff/<token>`.
 
 ### Errors in `lastError`
-`no_cookie` (secret missing, retry 30 min) · `unauthorized` (cookie expired/logged out, retry 30 min) · `insufficient_credits` (retry 5 min; the fuel bot POSTs `/on/<token>` after its first successful claim to clear the pause when `STATUS_URL` is set) · `too_soon` / `feed_busy` are handled silently · others retry after 5 min.
+`no_cookie` (secret missing, retry 30 min) · `unauthorized` (cookie expired/logged out, retry 30 min) · `insufficient_credits` (retry 5 min; the fuel bot POSTs `/wake/<token>` after its first successful claim to clear the pause when `STATUS_URL` is set; `/wake` never turns an OFF worker back on) · `too_soon` / `feed_busy` are handled silently · others retry after 5 min.
 
 ## Hard rules for agents
 

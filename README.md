@@ -25,7 +25,7 @@ GitHub Actions (repo ini, di-fork)
 
 - Tiap run cron, Worker kerja ±175 detik: narik kartu dengan jeda acak 10–60 detik, lalu berhenti. Cron berikutnya lanjut lagi. Jadi kartunya jalan terus, bukan cuma tiap 3 menit.
 - State (jumlah kartu, kredit, NPT, riwayat 30 kartu terakhir) disimpan di Durable Object, jadi halaman status langsung update tiap kartu.
-- Kalau kredit habis → Worker pause 5 menit lalu coba lagi. Bot fuel (kalau `STATUS_URL` diisi) langsung bangunin Worker setelah klaim pertama sukses. Cookie kedaluwarsa → status "Cookie kedaluwarsa", ganti secret `NT_COOKIE`.
+- Kalau kredit habis → Worker pause 5 menit lalu coba lagi. Bot fuel (kalau `STATUS_URL` diisi) langsung bangunin Worker setelah klaim pertama sukses, tapi tidak menyalakan Worker yang sengaja kamu Matikan. Cookie kedaluwarsa → status "Cookie kedaluwarsa", ganti secret `NT_COOKIE`.
 
 ---
 

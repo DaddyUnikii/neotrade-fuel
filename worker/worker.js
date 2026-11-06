@@ -96,6 +96,11 @@ export default {
   async fetch(req, env) { env = wrap(env);
     const u = new URL(req.url);
     if (req.method === "POST" && u.pathname === "/tick/" + env.STATUS_TOKEN) { await tick(env); return new Response("ok"); } // dipanggil nt-cron
+    if (req.method === "POST" && u.pathname === "/wake/" + env.STATUS_TOKEN) { // dipanggil bot fuel: hapus jeda kredit, TIDAK menyalakan worker yang di-OFF
+      const s3 = await getState(env);
+      if (s3.lastError === "insufficient_credits") { s3.pauseUntil = 0; s3.lastError = null; await putState(env, s3); }
+      return Response.json({ ok: true, off: (await env.STATE.get("off")) === "1" });
+    }
     if (req.method === "POST" && (u.pathname === "/on/" + env.STATUS_TOKEN || u.pathname === "/off/" + env.STATUS_TOKEN)) {
       const on = u.pathname.startsWith("/on/");
       const s2 = await getState(env); s2.off = !on; if (on) { s2.pauseUntil = 0; s2.lastError = s2.lastError === "no_cookie" ? s2.lastError : null; }
