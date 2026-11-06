@@ -47,8 +47,11 @@ for (let i = 0; i < n; i++) {
     if (rc.status !== "success") break;
     ok++; errs = 0;
     if (ok === 1 && process.env.STATUS_URL) {   // bangunin Worker kartu (hapus jeda "Kredit habis")
-      try { await fetch(process.env.STATUS_URL.trim().replace("/s/", "/on/"), { method: "POST", redirect: "manual" }); out("Worker kartu dibangunkan."); }
-      catch (e) { log("Gagal bangunin Worker:", e.message); }
+      try {
+        const r = await fetch(process.env.STATUS_URL.trim().replace("/s/", "/wake/"), { method: "POST" });
+        const j = await r.json().catch(() => ({}));
+        out(j.off ? "Worker kartu sedang OFF, tidak dinyalakan." : "Worker kartu dibangunkan.");
+      } catch (e) { log("Gagal bangunin Worker:", e.message); }
     }
   } catch (e) {
     if (++errs >= 5) { out(`Error 5x berturut, stop: ${e.shortMessage || e.message}`); break; }
