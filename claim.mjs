@@ -8,7 +8,7 @@ import fs from "fs";
 
 const ROUTER = "0xA5e24f880E2F21005A014861197eE94c5A63Ae8C";
 const ABI = parseAbi(["function mintSoulbound(uint256 typeId) returns (uint256)"]);
-const MIN_BNB = 0.002;
+const MIN_BNB = Number(process.env.MIN_BNB || "0.0003"); // sisa minimal BNB setelah gas
 const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const sleep = s => new Promise(r => setTimeout(r, s * 1000));
 const log = (...a) => console.log(new Date().toISOString(), ...a);
