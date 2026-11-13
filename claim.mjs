@@ -8,7 +8,6 @@ import fs from "fs";
 
 const ROUTER = "0xA5e24f880E2F21005A014861197eE94c5A63Ae8C";
 const ABI = parseAbi(["function mintSoulbound(uint256 typeId) returns (uint256)"]);
-const MIN_BNB = Number(process.env.MIN_BNB || "0.0003"); // sisa minimal BNB setelah gas
 const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const sleep = s => new Promise(r => setTimeout(r, s * 1000));
 const log = (...a) => console.log(new Date().toISOString(), ...a);
@@ -40,7 +39,7 @@ for (let i = 0; i < n; i++) {
     try { gas = await pub.estimateGas({ account, to: ROUTER, data }); }
     catch (e) { out(`Simulasi gagal, stop: ${e.shortMessage || e.message}`); break; }
     const gp = await pub.getGasPrice();
-    if (bal - Number(formatEther(gas * gp * 12n / 10n)) < MIN_BNB) { out(`Saldo BNB ${bal.toFixed(6)} terlalu tipis, stop.`); break; }
+    if (bal < Number(formatEther(gas * gp * 12n / 10n))) { out(`Saldo BNB ${bal.toFixed(6)} tidak cukup untuk gas, stop.`); break; }
     const hash = await wal.sendTransaction({ to: ROUTER, data, gas: gas * 12n / 10n, gasPrice: gp, value: 0n });
     const rc = await pub.waitForTransactionReceipt({ hash, timeout: 180000 });
     out(`Klaim #${i + 1}: ${rc.status}, gas ${formatEther(rc.gasUsed * rc.effectiveGasPrice)} BNB, https://bscscan.com/tx/${hash}`);
